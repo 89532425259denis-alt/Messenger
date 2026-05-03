@@ -8,6 +8,7 @@ const state = {
   ws: null,
   typingTimeout: null,
   peerTypingTimeout: null,
+  pollInterval: null,
 };
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -415,10 +416,11 @@ function setupComposer() {
   $('[data-send]').addEventListener('click', sendText);
 
   input.addEventListener('input', () => {
-    if (state.ws?.readyState === WebSocket.OPEN) {
-      clearTimeout(state.typingTimeout);
+    if (state.ws?.readyState === WebSocket.OPEN && !state.typingTimeout) {
       state.ws.send(JSON.stringify({ type: 'typing' }));
-      state.typingTimeout = setTimeout(() => {}, 1500);
+      state.typingTimeout = setTimeout(() => {
+        state.typingTimeout = null;
+      }, 1500);
     }
   });
 
@@ -627,6 +629,10 @@ function setupProfile() {
 
   $('[data-logout]').addEventListener('click', async () => {
     await api('auth/logout', { method: 'POST' }).catch(() => {});
+    if (state.pollInterval) {
+      clearInterval(state.pollInterval);
+      state.pollInterval = null;
+    }
     state.me = null;
     state.chats = [];
     hideModals();
@@ -650,7 +656,8 @@ async function enterApp() {
   showScreen('chats');
   await loadChats();
   // Lightweight polling fallback for chat list updates when no chat is open.
-  setInterval(() => {
+  if (state.pollInterval) clearInterval(state.pollInterval);
+  state.pollInterval = setInterval(() => {
     if (!state.activeChat && state.me) loadChats().catch(() => {});
   }, 15_000);
 }
