@@ -222,6 +222,10 @@ textarea {
   gap: var(--gap);
 }
 
+.auth-form[hidden] {
+  display: none;
+}
+
 .field {
   display: flex;
   flex-direction: column;
