@@ -1,10 +1,22 @@
 {
-  "name": "messenger-server",
+  "name": "devo-messenger",
   "version": "1.0.0",
-  "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+  "description": "DEVO+ messenger on Cloudflare (Workers + Durable Objects + D1 + R2 + KV)",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --local --persist-to .wrangler/state",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create devo",
+    "db:migrate:local": "wrangler d1 execute devo --local --file=./migrations/0001_init.sql",
+    "db:migrate:remote": "wrangler d1 execute devo --remote --file=./migrations/0001_init.sql",
+    "kv:create": "wrangler kv namespace create SESSIONS",
+    "r2:create": "wrangler r2 bucket create devo-media",
+    "lint": "eslint src --ext .js,.mjs",
+    "lint:fix": "eslint src --ext .js,.mjs --fix"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240821.1",
+    "eslint": "^8.57.0",
+    "wrangler": "^3.78.0"
   }
 }
