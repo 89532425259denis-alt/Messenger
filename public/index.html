@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <title>DEVO+</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Auth screen -->
+      <section class="screen screen--auth" data-screen="auth" hidden>
+        <div class="auth-card glass">
+          <h1 class="brand brand--lg">DEVO+</h1>
+          <p class="auth-tagline">Мессенджер на Cloudflare</p>
+
+          <div class="tabs">
+            <button class="tab is-active" data-tab="login">Вход</button>
+            <button class="tab" data-tab="register">Регистрация</button>
+          </div>
+
+          <form class="auth-form" data-form="login">
+            <label class="field">
+              <span>Логин</span>
+              <input name="username" autocomplete="username" required minlength="3" maxlength="32" />
+            </label>
+            <label class="field">
+              <span>Пароль</span>
+              <input name="password" type="password" autocomplete="current-password" required minlength="6" />
+            </label>
+            <button type="submit" class="btn btn--primary">Войти</button>
+            <p class="form-error" data-error hidden></p>
+          </form>
+
+          <form class="auth-form" data-form="register" hidden>
+            <label class="field">
+              <span>Имя</span>
+              <input name="display_name" required maxlength="64" />
+            </label>
+            <label class="field">
+              <span>Логин</span>
+              <input name="username" autocomplete="username" required minlength="3" maxlength="32" pattern="[a-zA-Z0-9_]+" />
+            </label>
+            <label class="field">
+              <span>Пароль</span>
+              <input name="password" type="password" autocomplete="new-password" required minlength="6" />
+            </label>
+            <button type="submit" class="btn btn--primary">Создать</button>
+            <p class="form-error" data-error hidden></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Chat list -->
+      <section class="screen screen--list" data-screen="chats" hidden>
+        <header class="list-header">
+          <h1 class="brand">DEVO+</h1>
+          <div class="search-row">
+            <label class="search glass">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"
+                  fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"
+                />
+              </svg>
+              <input
+                type="search"
+                placeholder="поиск..."
+                data-search
+                autocomplete="off"
+              />
+            </label>
+            <button class="icon-btn glass" data-menu aria-label="Меню">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </header>
+
+        <div class="chat-list" data-chat-list>
+          <div class="empty" data-empty>
+            <p>Нет чатов. Нажмите «+», чтобы написать кому-нибудь.</p>
+          </div>
+        </div>
+
+        <button class="fab" data-new-chat aria-label="Новый чат">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </section>
+
+      <!-- Chat room -->
+      <section class="screen screen--chat" data-screen="chat" hidden>
+        <header class="chat-header glass">
+          <button class="icon-btn back" data-back aria-label="Назад">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            </svg>
+          </button>
+          <div class="chat-header__avatar" data-chat-avatar>?</div>
+          <div class="chat-header__meta">
+            <div class="chat-header__title" data-chat-title>—</div>
+            <div class="chat-header__sub" data-chat-sub></div>
+          </div>
+        </header>
+
+        <div class="messages" data-messages></div>
+        <div class="typing" data-typing hidden>печатает…</div>
+
+        <form class="composer glass" data-composer>
+          <button type="button" class="icon-btn" data-attach aria-label="Прикрепить">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d="M21 12.79V17a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M16 3l5 5-9.5 9.5a2.83 2.83 0 1 1-4-4L16 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="Сообщение"
+            data-input
+            autocomplete="off"
+            maxlength="4000"
+          />
+          <button type="button" class="icon-btn" data-mic aria-label="Голосовое сообщение">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <rect x="9" y="3" width="6" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button type="submit" class="icon-btn send" data-send aria-label="Отправить">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d="M3 12L21 3l-4 18-5-7-9-2z" fill="currentColor" />
+            </svg>
+          </button>
+          <input type="file" data-file hidden accept="image/*,audio/*,video/*,application/pdf" />
+        </form>
+      </section>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" data-modal="new-chat" hidden>
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__card glass">
+        <h2>Новый чат</h2>
+        <label class="field">
+          <span>Поиск пользователя</span>
+          <input data-user-search placeholder="введите логин или имя" />
+        </label>
+        <div class="user-results" data-user-results></div>
+      </div>
+    </div>
+
+    <div class="modal" data-modal="profile" hidden>
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__card glass">
+        <h2>Профиль</h2>
+        <form data-profile-form>
+          <label class="field">
+            <span>Имя</span>
+            <input name="display_name" maxlength="64" />
+          </label>
+          <label class="field">
+            <span>О себе</span>
+            <textarea name="bio" maxlength="280" rows="3"></textarea>
+          </label>
+          <button type="submit" class="btn btn--primary">Сохранить</button>
+        </form>
+        <hr />
+        <div class="profile-actions">
+          <label class="theme-toggle">
+            Тёмная тема
+            <input type="checkbox" data-theme-toggle />
+          </label>
+          <button class="btn btn--ghost" data-logout>Выйти</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" data-toast hidden></div>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+name = "devo-messenger"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static assets (frontend) served directly from the Worker.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# Real-time chat rooms backed by Durable Objects.
+[[durable_objects.bindings]]
+name = "CHAT_ROOM"
+class_name = "ChatRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatRoom"]
+
+# D1 database for users, chats, messages, etc.
+[[d1_databases]]
+binding = "DB"
+database_name = "devo"
+# Replace database_id after running `npm run db:create`.
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# R2 bucket for media uploads (images, voice messages, files).
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "devo-media"
+
+# KV namespace for sessions / online presence.
+[[kv_namespaces]]
+binding = "SESSIONS"
+# Replace id after running `npm run kv:create`.
+id = "00000000000000000000000000000000"
+
+[vars]
+APP_NAME = "DEVO+"
